@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 import { MdCloudUpload } from "@react-icons/all-files/md/MdCloudUpload";
 
-export default function File({ title, max = 5, onFileSelect }) {
+export default function File({
+  title,
+  max = 5,
+  onFileSelect,
+  accept = ".csv,.json",
+}) {
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState(null);
@@ -87,7 +92,7 @@ export default function File({ title, max = 5, onFileSelect }) {
             ref={fileInputRef}
             id={title}
             type="file"
-            accept=".csv,.json"
+            accept={accept}
             className="sr-only"
             onChange={handleInputChange}
           />

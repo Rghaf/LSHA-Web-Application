@@ -5,6 +5,7 @@ import Number from "./Number";
 import Select from "./Select";
 import File from "./File";
 import Text from "./Text";
+import Json from "./Json";
 
 export default function Input({
   title,
@@ -15,9 +16,13 @@ export default function Input({
   placeholder,
   disabled = false,
   required = false,
+  multiple = false,
   handleChange,
+  onFileSelect,
+  accept,
   min,
   max,
+  checked,
 }) {
   const divClassName =
     type === "checkbox" ? "flex items-center justify-between" : "";
@@ -37,7 +42,9 @@ export default function Input({
       />
     );
   } else if (type === "checkbox") {
-    content = <CheckBox title={title} />;
+    content = (
+      <CheckBox title={title} handleChange={handleChange} checked={checked} />
+    );
   } else if (type === "number") {
     content = (
       <Number
@@ -46,6 +53,7 @@ export default function Input({
         placeholder={placeholder}
         min={min}
         max={max}
+        handleChange={handleChange}
       />
     );
   } else if (type === "select" || type === "select-rs") {
@@ -55,11 +63,27 @@ export default function Input({
         title={title}
         value={value}
         type={type}
+        multiple={multiple}
         handleChange={handleChange}
       />
     );
   } else if (type === "file") {
-    content = <File title={title} />;
+    content = (
+      <File
+        title={title}
+        accept={accept}
+        onFileSelect={onFileSelect}
+        max={max}
+      />
+    );
+  } else if (type === "json") {
+    content = (
+      <Json
+        handleChange={handleChange}
+        value={value}
+        placeholder={placeholder}
+      />
+    );
   }
 
   return (

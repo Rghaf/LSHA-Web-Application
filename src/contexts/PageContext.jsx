@@ -51,6 +51,11 @@ export function PageProvider({ children }) {
     }
   }
 
+  function handleSubmit() {
+    // Placeholder for submit logic
+    console.log("Form submitted");
+  }
+
   function active() {
     dispatch({ type: "ACTIVE" });
   }

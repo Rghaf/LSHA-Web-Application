@@ -1,8 +1,10 @@
-export default function CheckBox({ title }) {
+export default function CheckBox({ title, handleChange, checked }) {
   return (
     <label className="toggle-switch relative inline-flex items-center cursor-pointer">
       <input
         type="checkbox"
+        onChange={handleChange}
+        checked={checked}
         // value="true"
         id={title}
         name={title}

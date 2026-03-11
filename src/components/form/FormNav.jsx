@@ -14,8 +14,8 @@ export default function FormNav() {
         <Button
           key={index}
           disabled={!(pageState.pageNum === index + 1)}
-          text={`${index + 1} ${d}`}
-          classes="bg-blue-600 text-white font-semibold text-lg"
+          text={`${index + 1}-${d}`}
+          classes="bg-blue-600 text-white font-semibold"
         />
       ))}
     </div>

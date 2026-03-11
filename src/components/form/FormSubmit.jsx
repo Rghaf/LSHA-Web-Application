@@ -7,11 +7,10 @@ import { PageContext } from "../../contexts/PageContext";
 import { usePost } from "../../hooks/usePost";
 import { CustomCsContext } from "../../contexts/CustomCsContext";
 import { ClipLoader } from "react-spinners";
-import FormSubmit from "./FormSubmit";
 
-export default function FormFooter() {
+export default function FormSubmit() {
+  const { customCsState, customCsDispatch } = useContext(CustomCsContext);
   const { pageState, nextPage, prevPage, active } = useContext(PageContext);
-  const { customCsState } = useContext(CustomCsContext);
 
   const { postData, isLoading, error, response } = usePost(
     "http://127.0.0.1:8000/api/case-study/",
@@ -37,7 +36,6 @@ export default function FormFooter() {
       s.uppaalQuery ? JSON.stringify(s.uppaalQuery) : "",
     );
     fd.append("user_json", s.userJson ? JSON.stringify(s.userJson) : "");
-    postData(fd);
     fd.append("noise", s.noise);
     fd.append("p_value", s.pValue);
     fd.append("mi_query", s.miQuery);
@@ -46,10 +44,19 @@ export default function FormFooter() {
     fd.append("ht_query_type", s.htQueryType);
     fd.append("eq_condition", s.eqCondition);
     fd.append("is_stochastic", s.isStochastic);
+    postData(fd);
+    // customCsDispatch({
+    //   type: "RESET",
+    // });
+    console.log("S:", s);
+    console.log("FD", fd);
+    nextPage();
   }
   return (
-    <div className="flex justify-center mt-12 space-x-6">
-      {pageState.pageNum < 5 ? (
+    <>
+      {isLoading ? (
+        <ClipLoader />
+      ) : (
         <>
           <Button
             text="Back"
@@ -57,20 +64,15 @@ export default function FormFooter() {
             classes="font-bold bg-gray-200 text-gray-700 hover:bg-gray-300"
           />
           <Button
-            text="Continue to next step"
-            icon={<MdArrowForward />}
-            handleClick={nextPage}
+            text="Run The Algorithm"
+            icon={<FaUpload />}
+            handleClick={handleSubmitToApi}
             classes={
-              pageState.disabled
-                ? "font-bold bg-gray-200 text-gray-700"
-                : "text-white font-bold bg-blue-600 hover:bg-blue-700 hover:scale-103"
+              "text-white font-bold bg-green-800 hover:bg-green-700 hover:scale-103"
             }
-            disabled={pageState.disabled}
           />
         </>
-      ) : (
-        <FormSubmit />
       )}
-    </div>
+    </>
   );
 }

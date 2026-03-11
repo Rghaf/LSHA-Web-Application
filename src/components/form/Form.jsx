@@ -1,18 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
-import FormTitle from "./FromTitle";
-import Input from "../inputs/Input";
-import Button from "../Button";
-import Text from "../inputs/Text";
-import useFetch from "../../hooks/useFetch";
 import { usePost } from "../../hooks/usePost";
-import Alert from "../Alert";
 import { useToast } from "../../hooks/useToast";
 import FormPage1 from "./custom-cs/FormPage1";
-import FormPage2 from "./custom-cs/FormPage2";
-import { PageContext, PageProvider } from "../../contexts/PageContext";
+import FormPage2 from "./custom-cs/FormPage2-sim";
+import FormPage2Uppaal from "./custom-cs/FormPage2-uppaal";
+import FormPage3 from "./custom-cs/FormPage3";
+import { PageContext } from "../../contexts/PageContext";
 import { CustomCsContext } from "../../contexts/CustomCsContext";
 import Dialog from "../Dialog";
+import FormPage4 from "./custom-cs/FormPage4";
+import FormPage5 from "./custom-cs/FormPage5";
+import FormPage6 from "./custom-cs/FormPage6";
 
 export default function Form({ data }) {
   const csOptions = ["Thermo", "HRI", "Energy", "Auto Twin", "GR3N"];
@@ -45,57 +44,40 @@ export default function Form({ data }) {
     console.log("CS NAME:", customCsState.name);
     console.log("CS EMAIL:", customCsState.email);
     console.log("CS STRATEGY:", customCsState.resampleStrategy);
-    customCsState.events.map((event, index) => {
+    console.log("UPPAL", customCsState.uppaalModelFile);
+    console.log("QUERY", customCsState.uppaalQueryFile);
+    console.log("DATA FILE", customCsState.dataFile);
+    console.log("CSV HEADERS", customCsState.csvHeaders);
+    console.log("DRIVER SIGNAL", customCsState.driverSignal);
+    console.log("UPPAAL Query", customCsState.uppaalQuery);
+    console.log("UPPAL VARS", customCsState.uppaalVariables);
+    console.log("USER JSON", customCsState.userJson);
+    console.log("CONTEXT VARS", customCsState.contextVariables);
+    console.log("NOISE", customCsState.noise);
+    console.log("P-VALUE", customCsState.pValue);
+    console.log("MI QUERY", customCsState.miQuery);
+    console.log("PLOT DDTW", customCsState.plotDdtw);
+    console.log("HT QUERY", customCsState.htQuery);
+    console.log("HT QUERY TYPE", customCsState.htQueryType);
+    console.log("EQ CONDITION", customCsState.eqCondition);
+    console.log("IS STOCHASTIC", customCsState.isStochastic);
+    (customCsState.events || []).forEach((event, index) => {
       console.log(
         `EVENT - ${index}`,
         event.channel,
         event.condition,
-        event.symbol
+        event.symbol,
       );
-    }),
-      [customCsState];
-  });
-  // useEffect(() => {
-  //   setPageData(data.filter((d) => d.page === page));
-  // }, [page, data]);
+    });
+  }, [customCsState]);
+
   function handleBtnDisabled(dis) {
     if (!dis) disable();
     else active();
   }
-  // useEffect(() => {
-  //   if (!csName.trim()) disable();
-  //   else active();
-  //   console.log(pageState.disabled);
-  // }, [csName]);
-
-  // async function handleSubmit(e) {
-  //   e.preventDefault();
-  //   if (!csName.trim()) {
-  //     showError("Please fill in Case study name", error);
-  //     return;
-  //   }
-  //   const result = await postData({ name: csName, email: email });
-  //   if (result) {
-  //     setResult(result);
-  //     setCsCreated(true);
-  //     showSuccess(`The ${result.name} Case Study Successfully created!`);
-  //     customCsDispatch({
-  //       type: "CREATED",
-  //       payload: {
-  //         id: result.id,
-  //         name: result.name,
-  //         email: result.email,
-  //       },
-  //     });
-  //     nextPage();
-  //   } else {
-  //     showError("ERROR!!!", error);
-  //     console.error("Failed to create case study:", error);
-  //   }
-  // }
 
   const { postData, isLoading, error, response } = usePost(
-    "http://127.0.0.1:8000/api/case-study/"
+    "http://127.0.0.1:8000/api/case-study/",
   );
 
   return (
@@ -126,72 +108,28 @@ export default function Form({ data }) {
                 handleBtnDisabled={handleBtnDisabled}
               />
             )}
-            {pageState.pageNum === 2 && (
-              <FormPage2 handleBtnDisabled={handleBtnDisabled} />
+            {pageState.pageNum === 2 &&
+              customCsState.resampleStrategy === "SIM" && (
+                <FormPage2 handleBtnDisabled={handleBtnDisabled} />
+              )}
+            {pageState.pageNum === 2 &&
+              customCsState.resampleStrategy === "UPPAAL" && (
+                <FormPage2Uppaal handleBtnDisabled={handleBtnDisabled} />
+              )}
+            {pageState.pageNum === 3 && (
+              <FormPage3 handleBtnDisabled={handleBtnDisabled} />
             )}
-            {/* {csCreated && <Alert text="Successfully created!" style="success" />} */}
-            {/* {myData !== null ? (
-            <h1>{myData[0].event_list_name}</h1>
-          ) : (
-            <h1>Loading...</h1>
-          )} */}
-          </FormContainer>
-          {/* <h2>Current User: {customCsState.name}</h2>
-          <h2>Current User: {customCsState.email}</h2>
-          <h2>Current User: {customCsState.resampleStrategy}</h2>
-          {customCsState.events.map((event, index) => {
-            return (
-              <>
-                <h2 key={`channel-${index}`}>Current User: {event.channel}</h2>
-                <h2 key={`event-${index}`}>Current User: {event.condition}</h2>
-                <h2 key={`reza-${index}`}>Current User: {event.symbol}</h2>
-              </>
-            );
-          })} */}
-        </div>
-        {/* {page === 1 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          <FormContainer>
-            <FormTitle title="Toggle Options" />
-            {pageData
-              .filter((d) => d.type === "checkbox")
-              .map((d, index) => (
-                <Input
-                  key={index}
-                  title={d.title}
-                  description={d.description}
-                  type={d.type}
-                />
-              ))}
-          </FormContainer>
-          <FormContainer>
-            {pageData
-              .filter((d) => d.type === "number")
-              .map((d, index) => (
-                <Input
-                  key={index}
-                  title={d.title}
-                  description={d.description}
-                  type={d.type}
-                />
-              ))}
+            {pageState.pageNum === 4 && (
+              <FormPage4 handleBtnDisabled={handleBtnDisabled} />
+            )}
+            {pageState.pageNum === 5 && (
+              <FormPage5 handleBtnDisabled={handleBtnDisabled} />
+            )}
+            {pageState.pageNum === 6 && (
+              <FormPage6 handleBtnDisabled={handleBtnDisabled} />
+            )}
           </FormContainer>
         </div>
-      ) : (
-        <div className="max-w-xl mx-auto space-y-8">
-          <FormContainer>
-            {pageData.map((d, index) => (
-              <Input
-                key={index}
-                title={d.title}
-                description={d.description}
-                type={d.type}
-                options={d.type === "select" ? csOptions : rsOptions}
-              />
-            ))}
-          </FormContainer>
-        </div>
-      )} */}
       </form>
     </>
   );

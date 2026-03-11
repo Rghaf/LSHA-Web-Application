@@ -1,6 +1,13 @@
 import { MdKeyboardArrowDown } from "@react-icons/all-files/md/MdKeyboardArrowDown";
 
-export default function Select({ title, options, value, type, handleChange }) {
+export default function Select({
+  title,
+  options,
+  value,
+  type,
+  handleChange,
+  multiple,
+}) {
   return (
     <div class="relative mt-3">
       <select
@@ -8,6 +15,7 @@ export default function Select({ title, options, value, type, handleChange }) {
         id={title}
         value={value}
         name={title}
+        multiple={multiple}
         className="block w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg appearance-none pr-10 cursor-pointer">
         {/* {type === "select-cs"
           ? options.map((opt, index) => (
@@ -21,7 +29,7 @@ export default function Select({ title, options, value, type, handleChange }) {
               </option>
             ))} */}
         {options.map((opt, index) => (
-          <option key={index} value={opt.toLowerCase()}>
+          <option key={index} value={opt}>
             {opt}
           </option>
         ))}

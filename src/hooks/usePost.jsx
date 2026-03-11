@@ -5,33 +5,30 @@ export function usePost(url) {
   const [error, setError] = useState(null);
   const [response, setResponse] = useState(null);
 
-  const postData = async (payload) => {
+  async function postData(data) {
     setIsLoading(true);
     setError(null);
-
     try {
+      const isFormData =
+        typeof FormData !== "undefined" && data instanceof FormData;
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Tells server we are sending JSON
-        },
-        body: JSON.stringify(payload), // Converts JS Object to JSON String
+        headers: isFormData
+          ? undefined
+          : { "Content-Type": "application/json" },
+        body: isFormData ? data : JSON.stringify(data),
       });
-
       if (!res.ok) {
-        throw new Error(`Error: ${res.status}`);
+        throw new Error(`HTTP ${res.status}`);
       }
-
-      const data = await res.json();
-      setResponse(data); // Save response to state
-      return data; // Return data so the component can check success immediately
+      const json = await res.json();
+      setResponse(json);
     } catch (err) {
-      setError(err.message);
-      return null; // Return null if failed
+      setError(err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return { postData, isLoading, error, response };
 }

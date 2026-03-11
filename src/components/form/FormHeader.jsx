@@ -5,7 +5,7 @@ export default function FormHeader({ header, description }) {
     <>
       <FormNav />
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-4 leading-tight">
+        <h1 className="text-3xl font-extrabold text-gray-800 mb-4 leading-tight">
           {header}
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">{description}</p>

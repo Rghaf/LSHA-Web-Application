@@ -5,7 +5,7 @@ export default function InputLabel({ title, description, type }) {
       className={`${
         type === "number" ? "block mb-2" : ""
       } font-medium text-gray-700 ${
-        type === "select" ? "text-2xl" : "text-xl"
+        type === "select" ? "text-xl" : "text-xl"
       }`}>
       {title}
       {description && (

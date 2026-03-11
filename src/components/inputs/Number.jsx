@@ -1,7 +1,15 @@
-export default function Number({ title, value, placeholder, min, max }) {
+export default function Number({
+  title,
+  value,
+  placeholder,
+  min,
+  max,
+  handleChange,
+}) {
   return (
     <input
       type="number"
+      onChange={handleChange}
       id={title}
       value={value}
       name={title}
