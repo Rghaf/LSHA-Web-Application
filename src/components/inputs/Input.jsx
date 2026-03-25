@@ -24,8 +24,7 @@ export default function Input({
   max,
   checked,
 }) {
-  const divClassName =
-    type === "checkbox" ? "flex items-center justify-between" : "";
+  const divClassName = "";
 
   let content;
 
@@ -88,8 +87,24 @@ export default function Input({
 
   return (
     <div className={divClassName}>
-      <InputLabel title={title} description={description} type={type} />
-      {content}
+      {type === "checkbox" ? (
+        <>
+          <div className="flex items-center justify-between">
+            <InputLabel title={title} type={type} />
+            <div>{content}</div>
+          </div>
+          <div>
+            {description && (
+              <div className="text-sm text-gray-500">{description}</div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <InputLabel title={title} description={description} type={type} />
+          {content}
+        </>
+      )}
       {/* <span className="text-sm text-red-600">asdads</span> */}
     </div>
   );

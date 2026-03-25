@@ -4,7 +4,7 @@ export const CustomCsContext = createContext();
 
 const initialState = {
   // General configuration
-  id: null,
+  // id: null,
   name: null,
   email: null,
 
@@ -27,14 +27,14 @@ const initialState = {
   driverSignal: null,
   mainVariable: null,
   contextVariables: null,
-  variables: [
-    {
-      id: null,
-      name: null,
-      symbol: null,
-      data_column: null,
-    },
-  ],
+  // variables: [
+  //   {
+  //     id: null,
+  //     name: null,
+  //     symbol: null,
+  //     data_column: null,
+  //   },
+  // ],
 
   // specific variables for case study
   userJson: null,

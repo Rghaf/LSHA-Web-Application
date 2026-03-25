@@ -87,12 +87,14 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="number"
             title="Noise"
+            description="The expected amount of random error"
             value={customCsState.noise ?? ""}
             handleChange={(e) => handleNoise(e)}
           />
           <Input
             type="select"
             title="HT Query Type"
+            description="How the math is tested, Deterministic or Stochastic"
             options={["D", "S"]}
             value={customCsState.handleHtQueryType}
             handleChange={(e) => handleHtQueryType(e)}
@@ -100,12 +102,14 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="checkbox"
             title="MI Query"
+            description="A switch to enable learning the actual physics curves"
             checked={customCsState.miQuery ?? false}
             handleChange={(e) => handleMiQuery(e)}
           />
           <Input
             type="checkbox"
             title="Plot DDTW"
+            description="An option to generate visual graphs"
             checked={customCsState.plotDdtw ?? false}
             handleChange={(e) => handlePlotDdtw(e)}
           />
@@ -117,6 +121,7 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="number"
             title="P-value"
+            description="The statistical confidence level."
             value={customCsState.pValue ?? ""}
             handleChange={(e) => handlePValue(e)}
           />
@@ -124,6 +129,7 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="select"
             title="Eq Condition"
+            description="How strictly the algorithm compares two states"
             options={["S", "W"]}
             value={customCsState.eqCondition ?? ""}
             handleChange={(e) => handleEqCondition(e)}
@@ -132,6 +138,7 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="checkbox"
             title="HT Query"
+            description="Tests if new physical data fits known patterns."
             checked={customCsState.htQuery ?? false}
             handleChange={(e) => handleHtQuery(e)}
           />
@@ -139,6 +146,7 @@ export default function FormPage4({ handleBtnDisabled }) {
           <Input
             type="checkbox"
             title="Is Stochastic"
+            description="Tells the algorithm that the data comes from a messy real-world environment with random variations"
             checked={customCsState.isStochastic ?? false}
             handleChange={(e) => handleIsStochastic(e)}
           />

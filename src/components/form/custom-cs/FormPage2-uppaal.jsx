@@ -90,6 +90,7 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
       <Input
         type="select"
         title="Driver Signal"
+        description="The trigger or action that changes the system's state."
         options={[
           "----please select an option----",
           ...customCsState.uppaalQuery.variables,
@@ -100,6 +101,7 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
       <Input
         type="select"
         title="Main Variable"
+        description="The main physical value being tracked and modeled."
         options={[
           "----please select an option----",
           ...customCsState.uppaalQuery.variables,
@@ -110,6 +112,7 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
       <Input
         type="select"
         title="Context Variable"
+        description="Background conditions that affect the environment."
         multiple={true}
         options={[
           "----please select one or more options----",
