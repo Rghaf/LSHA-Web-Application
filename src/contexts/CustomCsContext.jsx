@@ -4,7 +4,7 @@ export const CustomCsContext = createContext();
 
 const initialState = {
   // General configuration
-  // id: null,
+  id: null,
   name: null,
   email: null,
 
@@ -47,7 +47,12 @@ const initialState = {
   htQuery: false,
   htQueryType: "S",
   eqCondition: "W",
-  isStochastic: false,
+  isAggregation: false,
+  nMin: 10,
+
+  // result files
+  resultTxt: null,
+  resultPdf: null,
 };
 
 export function CustomCsReducer(state, action) {

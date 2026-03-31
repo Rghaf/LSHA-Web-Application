@@ -22,6 +22,14 @@ export default function FormPage4({ handleBtnDisabled }) {
     });
   }
 
+  function handleNMin(e) {
+    const value = e.target.value;
+    customCsDispatch({
+      type: "UPDATE_FIELD",
+      payload: { key: "nMin", value },
+    });
+  }
+
   function handlePValue(e) {
     const value = e.target.value;
     customCsDispatch({
@@ -70,13 +78,23 @@ export default function FormPage4({ handleBtnDisabled }) {
     });
   }
 
-  function handleIsStochastic(e) {
+  // function handleIsStochastic(e) {
+  //   const value = e.target.checked;
+  //   console.log("IS STOCHASTIC VALUE:", value);
+  //   console.log(value);
+  //   customCsDispatch({
+  //     type: "UPDATE_FIELD",
+  //     payload: { key: "isStochastic", value },
+  //   });
+  // }
+
+  function handleIsAggregation(e) {
     const value = e.target.checked;
-    console.log("IS STOCHASTIC VALUE:", value);
+    console.log("IS Aggregation VALUE:", value);
     console.log(value);
     customCsDispatch({
       type: "UPDATE_FIELD",
-      payload: { key: "isStochastic", value },
+      payload: { key: "isAggregation", value },
     });
   }
 
@@ -106,6 +124,7 @@ export default function FormPage4({ handleBtnDisabled }) {
             checked={customCsState.miQuery ?? false}
             handleChange={(e) => handleMiQuery(e)}
           />
+
           <Input
             type="checkbox"
             title="Plot DDTW"
@@ -142,16 +161,22 @@ export default function FormPage4({ handleBtnDisabled }) {
             checked={customCsState.htQuery ?? false}
             handleChange={(e) => handleHtQuery(e)}
           />
-
           <Input
             type="checkbox"
-            title="Is Stochastic"
+            title="Is Aggregation"
             description="Tells the algorithm that the data comes from a messy real-world environment with random variations"
-            checked={customCsState.isStochastic ?? false}
-            handleChange={(e) => handleIsStochastic(e)}
+            checked={customCsState.isAggregation ?? false}
+            handleChange={(e) => handleIsAggregation(e)}
           />
         </div>
       </div>
+      <Input
+        type="number"
+        title="N min"
+        description="The expected amount of random error"
+        value={customCsState.nMin ?? 10}
+        handleChange={(e) => handleNMin(e)}
+      />
     </>
   );
 }

@@ -26,6 +26,21 @@ export const FormHeaderData = [
     description:
       "Check the summary of your case study before running the algorithm.",
   },
+  {
+    header: "Summary of your case study",
+    description:
+      "Check the summary of your case study before running the algorithm.",
+  },
+  {
+    header: "Summary of your case study",
+    description:
+      "Check the summary of your case study before running the algorithm.",
+  },
+  {
+    header: "Summary of your case study",
+    description:
+      "Check the summary of your case study before running the algorithm.",
+  },
 ];
 
 export const FormNavData = [

@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import FormPage from "./pages/FormPage";
 import { PageProvider } from "./contexts/PageContext";
 import { CustomCsProvider } from "./contexts/CustomCsContext";
+import Results from "./pages/Results";
 
 function App({ children }) {
   return (
@@ -14,6 +15,7 @@ function App({ children }) {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/form" element={<FormPage />} />
+            <Route path="/results" element={<Results />} />
           </Routes>
           <Container>{children}</Container>
         </CustomCsProvider>

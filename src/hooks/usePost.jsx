@@ -18,13 +18,19 @@ export function usePost(url) {
           : { "Content-Type": "application/json" },
         body: isFormData ? data : JSON.stringify(data),
       });
+
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
+
       const json = await res.json();
       setResponse(json);
+
+      return json;
     } catch (err) {
       setError(err);
+
+      throw err;
     } finally {
       setIsLoading(false);
     }

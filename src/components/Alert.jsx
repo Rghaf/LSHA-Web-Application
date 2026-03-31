@@ -1,4 +1,4 @@
-export default function Alert({ text, style = "info", m = "m-5" }) {
+export default function Alert({ text, style = "info", m = "m-5", size }) {
   let alertStyle;
 
   if (style === "danger") alertStyle = "bg-red-100 text-red-600 border-red-600";
@@ -10,7 +10,7 @@ export default function Alert({ text, style = "info", m = "m-5" }) {
   return (
     <div className={`text-center ${m}`}>
       <span
-        className={`text-lg ${alertStyle} text-center border-1 rounded-xl border w-sm p-3`}>
+        className={`${size || "text-lg"} ${alertStyle} text-center border-1 rounded-xl border w-sm p-3`}>
         {text}
       </span>
     </div>
