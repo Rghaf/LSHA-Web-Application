@@ -56,11 +56,11 @@ export default function FormSubmit() {
     );
     if (s.uppaalModelFile) fd.append("uppaal_model_file", s.uppaalModelFile);
     if (s.uppaalQueryFile) fd.append("uppaal_query_file", s.uppaalQueryFile);
-    if (s.dataFile) fd.append("csv_file", s.dataFile);
-    fd.append(
-      "uppaal_query",
-      s.uppaalQuery ? JSON.stringify(s.uppaalQuery) : "",
-    );
+    if (s.csvFile) fd.append("csv_file", s.csvFile);
+    // fd.append(
+    //   "uppaal_query",
+    //   s.uppaalQuery ? JSON.stringify(s.uppaalQuery) : "",
+    // );
     fd.append("user_json", s.userJson ? JSON.stringify(s.userJson) : "");
     fd.append("noise", s.noise);
     fd.append("p_value", s.pValue);

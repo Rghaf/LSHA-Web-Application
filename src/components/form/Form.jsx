@@ -3,8 +3,7 @@ import FormContainer from "./FormContainer";
 import { usePost } from "../../hooks/usePost";
 import { useToast } from "../../hooks/useToast";
 import FormPage1 from "./custom-cs/FormPage1";
-import FormPage2 from "./custom-cs/FormPage2-sim";
-import FormPage2Uppaal from "./custom-cs/FormPage2-uppaal";
+import FormPage2 from "./custom-cs/FormPage2";
 import FormPage3 from "./custom-cs/FormPage3";
 import { PageContext } from "../../contexts/PageContext";
 import { CustomCsContext } from "../../contexts/CustomCsContext";
@@ -108,14 +107,9 @@ export default function Form({ data }) {
                 handleBtnDisabled={handleBtnDisabled}
               />
             )}
-            {pageState.pageNum === 2 &&
-              customCsState.resampleStrategy === "SIM" && (
-                <FormPage2 handleBtnDisabled={handleBtnDisabled} />
-              )}
-            {pageState.pageNum === 2 &&
-              customCsState.resampleStrategy === "UPPAAL" && (
-                <FormPage2Uppaal handleBtnDisabled={handleBtnDisabled} />
-              )}
+            {pageState.pageNum === 2 && (
+              <FormPage2 handleBtnDisabled={handleBtnDisabled} />
+            )}
             {pageState.pageNum === 3 && (
               <FormPage3 handleBtnDisabled={handleBtnDisabled} />
             )}

@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import Input from "../../inputs/Input";
 import { CustomCsContext } from "../../../contexts/CustomCsContext";
 import { parseUppaalQuery } from "../../../functions/ParseUppaal";
+import { parseCSV } from "../../../functions/ParseCSV";
 
 export default function FormPage1({ handleBtnDisabled }) {
   const [reset, setReset] = useState(false);
@@ -10,6 +11,7 @@ export default function FormPage1({ handleBtnDisabled }) {
   const [resampleStrategy, setResampleStrategy] = useState("");
   const [uppaalModelFile, setUppaalModelFile] = useState(null);
   const [uppaalQueryFile, setUppaalQueryFile] = useState(null);
+  const [CSVFile, setCSVFile] = useState(null);
   const [dataFile, setDataFile] = useState(null);
   const { customCsState, customCsDispatch } = useContext(CustomCsContext);
 
@@ -58,7 +60,7 @@ export default function FormPage1({ handleBtnDisabled }) {
     }
     if (
       customCsState.resampleStrategy === "SIM" &&
-      customCsState.dataFile === null
+      customCsState.csvFile === null
     ) {
       dis = false;
     }
@@ -90,6 +92,39 @@ export default function FormPage1({ handleBtnDisabled }) {
       type: "UPDATE_FIELD",
       payload: { key: "resampleStrategy", value },
     });
+  }
+
+  function handleCSVFile(file) {
+    const value = file;
+    setCSVFile(value);
+    customCsDispatch({
+      type: "UPDATE_FIELD",
+      payload: { key: "csvFile", value: file },
+    });
+
+    // Read the file content and parse it
+    if (file && file.name.toLowerCase().endsWith(".csv")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const text = e.target.result || "";
+          const variables = parseCSV(text); // Pass text, not file
+          console.log("CSV Variables:", variables);
+
+          // Optionally save parsed variables to context
+          customCsDispatch({
+            type: "UPDATE_FIELD",
+            payload: { key: "csvHeaders", value: variables },
+          });
+        } catch (err) {
+          console.error("Failed to parse CSV:", err);
+        }
+      };
+      reader.onerror = (err) => {
+        console.error("Failed to read CSV file:", err);
+      };
+      reader.readAsText(file);
+    }
   }
 
   // File handlers - save File object to context
@@ -135,40 +170,40 @@ export default function FormPage1({ handleBtnDisabled }) {
     }
   }
 
-  function handleDataFile(file) {
-    const value = file;
-    setDataFile(value);
-    customCsDispatch({
-      type: "UPDATE_FIELD",
-      payload: { key: "dataFile", value: file },
-    });
+  // function handleDataFile(file) {
+  //   const value = file;
+  //   setDataFile(value);
+  //   customCsDispatch({
+  //     type: "UPDATE_FIELD",
+  //     payload: { key: "dataFile", value: file },
+  //   });
 
-    // Read CSV and log headers
-    if (file && file.name.toLowerCase().endsWith(".csv")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const text = e.target.result || "";
-          // Get first non-empty line
-          const firstLine =
-            text.split(/\r?\n/).find((line) => line.trim().length > 0) || "";
-          // Split by comma (basic CSV; adjust if you need quoted fields)
-          const headers = firstLine.split(",").map((h) => h.trim());
-          console.log("CSV Headers:", headers);
-          customCsDispatch({
-            type: "UPDATE_FIELD",
-            payload: { key: "csvHeaders", value: headers },
-          });
-        } catch (err) {
-          console.error("Failed to parse CSV headers:", err);
-        }
-      };
-      reader.onerror = (err) => {
-        console.error("Failed to read CSV file:", err);
-      };
-      reader.readAsText(file);
-    }
-  }
+  // Read CSV and log headers
+  //   if (file && file.name.toLowerCase().endsWith(".csv")) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       try {
+  //         const text = e.target.result || "";
+  //         // Get first non-empty line
+  //         const firstLine =
+  //           text.split(/\r?\n/).find((line) => line.trim().length > 0) || "";
+  //         // Split by comma (basic CSV; adjust if you need quoted fields)
+  //         const headers = firstLine.split(",").map((h) => h.trim());
+  //         console.log("CSV Headers:", headers);
+  //         customCsDispatch({
+  //           type: "UPDATE_FIELD",
+  //           payload: { key: "csvHeaders", value: headers },
+  //         });
+  //       } catch (err) {
+  //         console.error("Failed to parse CSV headers:", err);
+  //       }
+  //     };
+  //     reader.onerror = (err) => {
+  //       console.error("Failed to read CSV file:", err);
+  //     };
+  //     reader.readAsText(file);
+  //   }
+  // }
 
   return (
     <>
@@ -225,8 +260,8 @@ export default function FormPage1({ handleBtnDisabled }) {
             type="file"
             title="CSV file"
             accept=".csv"
-            value={dataFile}
-            onFileSelect={(e) => handleDataFile(e)}
+            value={CSVFile}
+            onFileSelect={(e) => handleCSVFile(e)}
           />
         </>
       )}

@@ -13,29 +13,29 @@ export default function FormPage2({ handleBtnDisabled }) {
   const { pageState, pageDispatch, loadingOn, loadingOff } =
     useContext(PageContext);
 
-  useEffect(() => {
-    let dis = true;
-    if (
-      customCsState.driverSignal === null ||
-      customCsState.driverSignal === "select"
-    ) {
-      dis = false;
-    }
-    for (let i = 0; i < customCsState.variables.length; i++) {
-      if (
-        customCsState.variables[i].name === null ||
-        customCsState.variables[i].symbol === null ||
-        customCsState.variables[i].data_column === null ||
-        !customCsState.variables[i].name.trim() ||
-        !customCsState.variables[i].symbol.trim() ||
-        !customCsState.variables[i].data_column.trim() ||
-        customCsState.variables[i].data_column === "select"
-      ) {
-        dis = false;
-      }
-    }
-    handleBtnDisabled(dis);
-  }, [customCsState]);
+  // useEffect(() => {
+  //   let dis = true;
+  //   if (
+  //     customCsState.driverSignal === null ||
+  //     customCsState.driverSignal === "select"
+  //   ) {
+  //     dis = false;
+  //   }
+  //   for (let i = 0; i < customCsState.variables.length; i++) {
+  //     if (
+  //       customCsState.variables[i].name === null ||
+  //       customCsState.variables[i].symbol === null ||
+  //       customCsState.variables[i].data_column === null ||
+  //       !customCsState.variables[i].name.trim() ||
+  //       !customCsState.variables[i].symbol.trim() ||
+  //       !customCsState.variables[i].data_column.trim() ||
+  //       customCsState.variables[i].data_column === "select"
+  //     ) {
+  //       dis = false;
+  //     }
+  //   }
+  //   handleBtnDisabled(dis);
+  // }, [customCsState]);
 
   // check if the fields are all filled, to enable the next button
   // useEffect(() => {

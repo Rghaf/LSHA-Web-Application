@@ -14,7 +14,7 @@ const initialState = {
   // files
   uppaalModelFile: null,
   uppaalQueryFile: null,
-  dataFile: null,
+  csvFile: null,
 
   // extracted data from uploaded files
   csvHeaders: null,

@@ -5,10 +5,16 @@ import { PageContext } from "../../../contexts/PageContext";
 import Button from "../../Button";
 import Input from "../../inputs/Input";
 
-export default function FormPage2Uppaal({ handleBtnDisabled }) {
+export default function FormPage2({ handleBtnDisabled }) {
   const [variables, setVariables] = useState([]);
   const { customCsState, customCsDispatch } = useContext(CustomCsContext);
   const { pageState } = useContext(PageContext);
+  const variableOptions =
+    customCsState.resampleStrategy === "UPPAAL"
+      ? customCsState.uppaalQuery?.variables || []
+      : customCsState.resampleStrategy === "SIM"
+        ? customCsState.csvHeaders || []
+        : [];
 
   useEffect(() => {
     let dis = true;
@@ -57,11 +63,9 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
 
     // 2. Filter out placeholder and restore original case
     const values = selectedOptions
-      .filter((val) => val !== "----please select an option----")
+      .filter((val) => val !== "----please select one or more options----")
       .map((val) => {
-        const original = (customCsState.uppaalQuery.variables || []).find(
-          (v) => v === val,
-        );
+        const original = variableOptions.find((v) => v === val);
         return original || val;
       });
 
@@ -81,20 +85,11 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
 
   return (
     <>
-      {/* <Input
-        type="text"
-        title="Constraint"
-        value={customCsState.uppaalQuery.constraints}
-        disabled={true}
-      /> */}
       <Input
         type="select"
         title="Driver Signal"
         description="The trigger or action that changes the system's state."
-        options={[
-          "----please select an option----",
-          ...customCsState.uppaalQuery.variables,
-        ]}
+        options={["----please select an option----", ...variableOptions]}
         value={customCsState.driverSignal ?? ""}
         handleChange={(e) => handleDriverSignal(e)}
       />
@@ -102,10 +97,7 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
         type="select"
         title="Main Variable"
         description="The main physical value being tracked and modeled."
-        options={[
-          "----please select an option----",
-          ...customCsState.uppaalQuery.variables,
-        ]}
+        options={["----please select an option----", ...variableOptions]}
         value={customCsState.mainVariable ?? ""}
         handleChange={(e) => handleMainVariable(e)}
       />
@@ -116,18 +108,24 @@ export default function FormPage2Uppaal({ handleBtnDisabled }) {
         multiple={true}
         options={[
           "----please select one or more options----",
-          ...customCsState.uppaalQuery.variables,
+          ...variableOptions,
         ]}
-        value={customCsState.contextVariables ?? []}
+        value={
+          Array.isArray(customCsState.contextVariables)
+            ? customCsState.contextVariables
+            : []
+        }
         handleChange={(e) => handleContextVariables(e)}
       />
+    </>
+  );
+}
 
-      {/* <Button
+{
+  /* <Button
         text="Add more"
         handleClick={addVariableRow}
         icon={<MdAdd />}
         classes="text-white bg-blue-600 hover:bg-blue-700 hover:scale-101"
-      /> */}
-    </>
-  );
+      /> */
 }
