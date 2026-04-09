@@ -48,7 +48,10 @@ export default function FormSubmit() {
     fd.append("name", s.name || "");
     fd.append("email", s.email || "");
     fd.append("resample_strategy", s.resampleStrategy || "");
-    fd.append("driver_signal", s.driverSignal || "");
+    fd.append(
+      "driver_signal",
+      s.driverSignal ? JSON.stringify(s.driverSignal) : "",
+    );
     fd.append("main_variable", s.mainVariable || "");
     fd.append(
       "context_variables",

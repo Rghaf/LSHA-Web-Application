@@ -20,7 +20,8 @@ export default function FormPage2({ handleBtnDisabled }) {
     let dis = true;
     if (
       customCsState.driverSignal === null ||
-      customCsState.driverSignal === "----please select an option----" ||
+      customCsState.driverSignal ===
+        "----please select one or more options----" ||
       customCsState.mainVariable === null ||
       customCsState.mainVariable === "----please select an option----"
       // customCsState.contextVariables.length === 0
@@ -39,10 +40,23 @@ export default function FormPage2({ handleBtnDisabled }) {
   }, [customCsState]);
 
   function handleDriverSignal(e) {
-    const value = e.target.value;
+    // 1. Get all selected options from the multiple select
+    const selectedOptions = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value,
+    );
+
+    // 2. Filter out placeholder and restore original case
+    const values = selectedOptions
+      .filter((val) => val !== "----please select one or more options----")
+      .map((val) => {
+        const original = variableOptions.find((v) => v === val);
+        return original || val;
+      });
+
     customCsDispatch({
       type: "UPDATE_FIELD",
-      payload: { key: "driverSignal", value },
+      payload: { key: "driverSignal", value: values },
     });
   }
 
@@ -88,11 +102,25 @@ export default function FormPage2({ handleBtnDisabled }) {
       <Input
         type="select"
         title="Driver Signal"
+        multiple={true}
         description="The trigger or action that changes the system's state."
-        options={["----please select an option----", ...variableOptions]}
-        value={customCsState.driverSignal ?? ""}
+        options={[
+          "----please select one or more options----",
+          ...variableOptions,
+        ]}
+        value={
+          Array.isArray(customCsState.driverSignal)
+            ? customCsState.driverSignal
+            : []
+        }
         handleChange={(e) => handleDriverSignal(e)}
       />
+      {/* <Button
+        text="Add more"
+        // handleClick={addVariableRow}
+        icon={<MdAdd />}
+        classes="text-white bg-blue-600 hover:bg-blue-700 hover:scale-101"
+      /> */}
       <Input
         type="select"
         title="Main Variable"
@@ -119,13 +147,4 @@ export default function FormPage2({ handleBtnDisabled }) {
       />
     </>
   );
-}
-
-{
-  /* <Button
-        text="Add more"
-        handleClick={addVariableRow}
-        icon={<MdAdd />}
-        classes="text-white bg-blue-600 hover:bg-blue-700 hover:scale-101"
-      /> */
 }
