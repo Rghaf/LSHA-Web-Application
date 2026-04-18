@@ -15,6 +15,18 @@ export default function FormPage1({ handleBtnDisabled }) {
   const [dataFile, setDataFile] = useState(null);
   const { customCsState, customCsDispatch } = useContext(CustomCsContext);
 
+  function getFiles(fileOrFiles) {
+    return Array.isArray(fileOrFiles)
+      ? fileOrFiles
+      : fileOrFiles
+        ? [fileOrFiles]
+        : [];
+  }
+
+  function getPrimaryFile(fileOrFiles) {
+    return getFiles(fileOrFiles)[0] ?? null;
+  }
+
   useEffect(() => {
     if (customCsState.name) {
       setCsName(customCsState.name);
@@ -34,10 +46,21 @@ export default function FormPage1({ handleBtnDisabled }) {
     if (customCsState.uppaalQueryFile) {
       setUppaalQueryFile(customCsState.uppaalQueryFile);
     } else setUppaalQueryFile(null);
-    if (customCsState.dataFile) {
-      setDataFile(customCsState.dataFile);
-    } else setDataFile(null);
-  }, [customCsState.name, customCsState.email, customCsState.resampleStrategy]);
+    if (customCsState.csvFile) {
+      setCSVFile(customCsState.csvFile);
+    } else setCSVFile(null);
+    // if (customCsState.dataFile) {
+    //   setDataFile(customCsState.dataFile);
+    // } else setDataFile(null);
+  }, [
+    customCsState.name,
+    customCsState.email,
+    customCsState.resampleStrategy,
+    customCsState.uppaalModelFile,
+    customCsState.uppaalQueryFile,
+    customCsState.csvFile,
+    // customCsState.dataFile,
+  ]);
 
   useEffect(() => {
     let dis = true;
@@ -94,15 +117,17 @@ export default function FormPage1({ handleBtnDisabled }) {
     });
   }
 
-  function handleCSVFile(file) {
-    const value = file;
+  function handleCSVFile(fileOrFiles) {
+    const files = getFiles(fileOrFiles);
+    const value = files.length > 1 ? files : (files[0] ?? null);
     setCSVFile(value);
     customCsDispatch({
       type: "UPDATE_FIELD",
-      payload: { key: "csvFile", value: file },
+      payload: { key: "csvFile", value },
     });
 
     // Read the file content and parse it
+    const file = getPrimaryFile(fileOrFiles);
     if (file && file.name.toLowerCase().endsWith(".csv")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -128,24 +153,25 @@ export default function FormPage1({ handleBtnDisabled }) {
   }
 
   // File handlers - save File object to context
-  function handleUppaalModelFile(file) {
-    const value = file;
+  function handleUppaalModelFile(fileOrFiles) {
+    const value = getPrimaryFile(fileOrFiles);
     setUppaalModelFile(value);
     customCsDispatch({
       type: "UPDATE_FIELD",
-      payload: { key: "uppaalModelFile", value: file },
+      payload: { key: "uppaalModelFile", value },
     });
   }
 
-  function handleUppaalQueryFile(file) {
-    const value = file;
+  function handleUppaalQueryFile(fileOrFiles) {
+    const value = getPrimaryFile(fileOrFiles);
     setUppaalQueryFile(value);
     customCsDispatch({
       type: "UPDATE_FIELD",
-      payload: { key: "uppaalQueryFile", value: file },
+      payload: { key: "uppaalQueryFile", value },
     });
 
     // Read the file content and parse it
+    const file = getPrimaryFile(fileOrFiles);
     if (file && file.name.toLowerCase().endsWith(".q")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -240,6 +266,7 @@ export default function FormPage1({ handleBtnDisabled }) {
             title="UPPAAL Model file"
             value={uppaalModelFile}
             accept=".xml"
+            multiple={false}
             onFileSelect={(e) => handleUppaalModelFile(e)}
           />
           <Input
@@ -247,6 +274,7 @@ export default function FormPage1({ handleBtnDisabled }) {
             title="UPPAAL Query file"
             accept=".q"
             value={uppaalQueryFile}
+            multiple={false}
             onFileSelect={(e) => handleUppaalQueryFile(e)}
           />
         </>
@@ -261,6 +289,7 @@ export default function FormPage1({ handleBtnDisabled }) {
             title="CSV file"
             accept=".csv"
             value={CSVFile}
+            multiple={true}
             onFileSelect={(e) => handleCSVFile(e)}
           />
         </>

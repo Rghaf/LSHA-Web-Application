@@ -20,6 +20,15 @@ export default function FormFooter() {
   function handleSubmitToApi() {
     const s = customCsState || {};
     const fd = new FormData();
+
+    function appendFiles(key, files) {
+      if (!files) return;
+      const fileList = Array.isArray(files) ? files : [files];
+      fileList.forEach((file) => {
+        if (file) fd.append(key, file);
+      });
+    }
+
     fd.append("name", s.name || "");
     fd.append("email", s.email || "");
     fd.append("resample_strategy", s.resampleStrategy || "");
@@ -29,9 +38,9 @@ export default function FormFooter() {
       "context_variables",
       s.contextVariables ? JSON.stringify(s.contextVariables) : "",
     );
-    if (s.uppaalModelFile) fd.append("uppaal_model_file", s.uppaalModelFile);
-    if (s.uppaalQueryFile) fd.append("uppaal_query_file", s.uppaalQueryFile);
-    if (s.dataFile) fd.append("csv_file", s.dataFile);
+    appendFiles("uppaal_model_file", s.uppaalModelFile);
+    appendFiles("uppaal_query_file", s.uppaalQueryFile);
+    appendFiles("csv_file", s.csvFile || s.dataFile);
     fd.append(
       "uppaal_query",
       s.uppaalQuery ? JSON.stringify(s.uppaalQuery) : "",

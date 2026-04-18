@@ -96,9 +96,9 @@ export default function Results() {
     <>
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
+          <ToastContainer />
           {isLoaded ? (
             <div className="mt-20">
-              <ToastContainer />
               <h1 className="text-4xl font-bold my-10">
                 The results Are ready!
               </h1>

@@ -45,7 +45,7 @@ export default function Form({ data }) {
     console.log("CS STRATEGY:", customCsState.resampleStrategy);
     console.log("UPPAL", customCsState.uppaalModelFile);
     console.log("QUERY", customCsState.uppaalQueryFile);
-    console.log("DATA FILE", customCsState.dataFile);
+    console.log("DATA FILE", customCsState.csvFile);
     console.log("CSV HEADERS", customCsState.csvHeaders);
     console.log("DRIVER SIGNAL", customCsState.driverSignal);
     console.log("UPPAAL Query", customCsState.uppaalQuery);

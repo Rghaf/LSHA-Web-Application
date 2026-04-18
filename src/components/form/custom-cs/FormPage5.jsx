@@ -15,18 +15,49 @@ function prettyKey(key) {
     .replace(/^\w/g, (c) => c.toUpperCase());
 }
 
+function isFileValue(val) {
+  return typeof File !== "undefined" && val instanceof File;
+}
+
+function renderFileValue(file) {
+  const sizeKb = (file.size / 1024).toFixed(1);
+  return (
+    <span>
+      {file.name} ({sizeKb} KB)
+    </span>
+  );
+}
+
 function renderValue(val) {
   if (val === null || val === undefined || val === "") return <span>—</span>;
-  if (typeof File !== "undefined" && val instanceof File) {
-    const sizeKb = (val.size / 1024).toFixed(1);
+  if (isFileValue(val)) {
+    return renderFileValue(val);
+  }
+  if (Array.isArray(val)) {
+    if (val.length === 0) return <span>[]</span>;
+
+    if (val.every((item) => isFileValue(item))) {
+      return (
+        <ul className="list-disc pl-6 space-y-1">
+          {val.map((file, idx) => (
+            <li key={`${file.name}-${idx}`}>{renderFileValue(file)}</li>
+          ))}
+        </ul>
+      );
+    }
+
     return (
-      <span>
-        {val.name} ({sizeKb} KB)
-      </span>
+      <pre className="whitespace-pre-wrap wrap-break-word text-base">
+        {JSON.stringify(val, null, 2)}
+      </pre>
     );
   }
-  if (Array.isArray(val) || (typeof val === "object" && val)) {
-    return <>{JSON.stringify(val, null, 2)}</>;
+  if (typeof val === "object" && val) {
+    return (
+      <pre className="whitespace-pre-wrap wrap-break-word text-base">
+        {JSON.stringify(val, null, 2)}
+      </pre>
+    );
   }
   return <span>{String(val)}</span>;
 }

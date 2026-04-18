@@ -73,6 +73,7 @@ export default function Input({
         accept={accept}
         onFileSelect={onFileSelect}
         max={max}
+        multiple={multiple}
       />
     );
   } else if (type === "json") {

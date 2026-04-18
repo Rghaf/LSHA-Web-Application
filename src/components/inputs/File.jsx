@@ -6,18 +6,37 @@ export default function File({
   max = 5,
   onFileSelect,
   accept = ".csv,.json",
+  multiple = false,
 }) {
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [fileName, setFileName] = useState(null);
+  const [fileNames, setFileNames] = useState([]);
 
-  function handleFileSelect(file) {
-    if (file && file.size <= max * 1024 * 1024) {
-      setFileName(file.name);
-      onFileSelect?.(file);
-    } else {
-      alert(`File must be smaller than ${max}MB`);
+  function getFiles(fileList) {
+    return Array.from(fileList || []);
+  }
+
+  function handleFileSelect(files) {
+    const selectedFiles = getFiles(files);
+    const normalizedFiles = multiple
+      ? selectedFiles
+      : selectedFiles.slice(0, 1);
+
+    if (normalizedFiles.length === 0) {
+      return;
     }
+
+    const invalidFile = normalizedFiles.find(
+      (file) => file.size > max * 1024 * 1024,
+    );
+
+    if (invalidFile) {
+      alert(`File must be smaller than ${max}MB`);
+      return;
+    }
+
+    setFileNames(normalizedFiles.map((file) => file.name));
+    onFileSelect?.(multiple ? normalizedFiles : normalizedFiles[0]);
   }
 
   function handleDrop(e) {
@@ -26,9 +45,7 @@ export default function File({
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
-      console.log("Dropped file:", file);
-      handleFileSelect(file);
+      handleFileSelect(e.dataTransfer.files);
     }
   }
 
@@ -45,9 +62,7 @@ export default function File({
   }
 
   function handleInputChange(e) {
-    const file = e.target.files[0];
-    console.log("Selected file:", file);
-    handleFileSelect(file);
+    handleFileSelect(e.target.files);
   }
 
   function handleBrowseClick() {
@@ -85,13 +100,26 @@ export default function File({
             </button>
             to upload (Max {max}MB)
           </p>
-          {fileName && (
-            <p className="mt-2 text-sm text-green-600">✓ {fileName}</p>
+          {fileNames.length > 0 && (
+            <div className="mt-2 text-sm text-green-600">
+              <p className="font-medium">
+                ✓ {fileNames.length} file{fileNames.length > 1 ? "s" : ""}{" "}
+                selected
+              </p>
+              <ul className="mt-1 space-y-1 text-left">
+                {fileNames.map((name) => (
+                  <li key={name} className="break-all">
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           <input
             ref={fileInputRef}
             id={title}
             type="file"
+            multiple={multiple}
             accept={accept}
             className="sr-only"
             onChange={handleInputChange}

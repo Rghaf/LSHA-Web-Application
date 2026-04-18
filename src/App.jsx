@@ -6,6 +6,8 @@ import FormPage from "./pages/FormPage";
 import { PageProvider } from "./contexts/PageContext";
 import { CustomCsProvider } from "./contexts/CustomCsContext";
 import Results from "./pages/Results";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App({ children }) {
   return (
@@ -17,6 +19,7 @@ function App({ children }) {
             <Route path="/form" element={<FormPage />} />
             <Route path="/results" element={<Results />} />
           </Routes>
+          <ToastContainer theme="colored" />
           <Container>{children}</Container>
         </CustomCsProvider>
       </PageProvider>
